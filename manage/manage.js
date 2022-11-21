@@ -13,7 +13,7 @@ async function getFilesList() {
         element.remove();
     } else {
         let element = document.getElementById("no_codes");
-        element.style.visibility = "visible";
+        element.style.display = "block";
     }
     let ul = document.getElementById("list");
     data.forEach( (element) => {
