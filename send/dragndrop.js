@@ -3,12 +3,15 @@
 (function(e,t,n){var r=e.querySelectorAll("html")[0];r.className=r.className.replace(/(^|\s)no-js(\s|$)/,"$1js$2")})(document,window,0);
 
 async function uploadFile(formData) {
+    const cb = document.querySelector('#requiresAcceptance');
+    formData.set("requiresAcceptance", cb.checked);
     let response = await fetch('http://localhost:8080/upload', {
-        method: "POST",
+        method: 'POST',
+        credentials: 'include',
         body: formData
     });
-    if (response.status == 200) {
-        let json = await response.json()
+    if (response.status === 200) {
+        let json = await response.json();
         console.log(json);
         document.getElementById("your_code").innerHTML = json["code"];
         console.log("code: " + json["code"]);

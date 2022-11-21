@@ -11,5 +11,4 @@ async function downloadFile() {
     } else {
         alert("Code length is wrong");
     }
-
 }
