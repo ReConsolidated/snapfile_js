@@ -2,6 +2,13 @@ addEventListener("load", (event) => {
     getFilesList();
 });
 
+async function getRequests(code) {
+    let url = 'http://localhost:8080/requests/' + code;
+    return fetch(url, {
+        credentials: 'include'
+    });
+}
+
 async function getFilesList() {
     let url = 'http://localhost:8080/manage_files';
     let response = await fetch(url, {
@@ -15,18 +22,69 @@ async function getFilesList() {
         let element = document.getElementById("no_codes");
         element.style.display = "block";
     }
-    let ul = document.getElementById("list");
-    data.forEach( (element) => {
-        let li = document.createElement("li");
-        let a = document.createElement("a");
-        a.href = "/snapfile_js";
 
-        a.appendChild(document.createTextNode(element["code"]));
-        let br = document.createElement("br");
-        a.appendChild(br);
-        a.appendChild(document.createTextNode(element["fileName"]));
-        li.appendChild(a);
+    let ul = document.getElementById("list");
+    for (const element of data) {
+        let name = "Gracjan";
+        let filename = element["fileName"];
+        let code = element["code"];
+
+        let li = document.createElement("li");
         ul.appendChild(li);
-       console.log(element);
-    });
+
+        let divCodeContainer = document.createElement("div");
+        divCodeContainer.classList.add("code-container");
+        li.appendChild(divCodeContainer);
+
+        let divCode = document.createElement("div");
+        divCode.classList.add("code");
+        divCode.appendChild(document.createTextNode(code));
+        divCodeContainer.appendChild(divCode);
+
+        let divFileName = document.createElement("div");
+        divFileName.classList.add("file_name");
+        divFileName.appendChild(document.createTextNode("Filename: " + filename));
+        divCodeContainer.appendChild(divFileName);
+
+        let divRequestList = document.createElement("div");
+        divRequestList.classList.add("request_list");
+        divCodeContainer.appendChild(divRequestList);
+
+        console.log(element);
+        let requestsResponse = await getRequests(element["code"]);
+        let requests = await requestsResponse.json();
+        console.log(requests);
+        requests.forEach((request) => {
+            console.log(request);
+            let requesterName = request["requesterName"];
+            let requestId = request["id"];
+            let divRequest = document.createElement("div");
+            divRequest.classList.add("request");
+            divRequestList.appendChild(divRequest);
+
+            let divRequesterName = document.createElement("div");
+            divRequesterName.classList.add("requester-name");
+            divRequesterName.appendChild(document.createTextNode("Request from " + requesterName));
+            divRequest.appendChild(divRequesterName);
+
+            let buttonAccept = document.createElement("button");
+            buttonAccept.appendChild(document.createTextNode("Accept "));
+            buttonAccept.onclick = function() {
+                console.log("Akceptowano id: " + requestId);
+                let acceptUrl = 'http://localhost:8080/accept_request?requestId=' + requestId;
+                fetch(acceptUrl, {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+            };
+            divRequest.appendChild(buttonAccept);
+            let buttonDecline = document.createElement("button");
+            buttonDecline.appendChild(document.createTextNode(" Decline"));
+            divRequest.appendChild(buttonDecline);
+        });
+        ///
+
+        ///
+
+    }
 }

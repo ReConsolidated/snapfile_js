@@ -20,6 +20,10 @@
     border-top: solid black 1px;
 }
 
+button {
+    margin: 3px;
+}
+
 #codes_container {
     background-color: #c8dadf;
     margin-left: auto;
