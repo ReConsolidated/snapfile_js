@@ -21,6 +21,7 @@ async function getFilesList() {
     } else {
         let element = document.getElementById("no_codes");
         element.style.display = "block";
+        document.getElementById("codes_container").style.display = "none";
     }
 
     let ul = document.getElementById("list");
@@ -76,10 +77,20 @@ async function getFilesList() {
                     method: 'POST',
                     credentials: 'include'
                 });
+                divRequestList.removeChild(divRequest);
             };
             divRequest.appendChild(buttonAccept);
             let buttonDecline = document.createElement("button");
             buttonDecline.appendChild(document.createTextNode(" Decline"));
+            buttonDecline.onclick = function() {
+                console.log("Odrzucono id: " + requestId);
+                let declineUrl = 'http://localhost:8080/decline_request?requestId=' + requestId;
+                fetch(declineUrl, {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                divRequestList.removeChild(divRequest);
+            }
             divRequest.appendChild(buttonDecline);
         });
         ///

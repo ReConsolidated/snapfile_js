@@ -38,3 +38,18 @@ label {
 {
     background-color: #0f3c4b;
 }
+
+#request_successful {
+    display: none;
+    color: green;
+    font-size: 20px;
+    margin: 8px;
+}
+
+
+#request_failed {
+    display: none;
+    color: red;
+    font-size: 20px;
+    margin: 8px;
+}
